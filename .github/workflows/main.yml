@@ -55,7 +55,8 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=TheotimCDV_tp-devops-correction-docker
-
+        working-directory: simple-api
+        
   build-and-push-docker-image:
     needs: build-and-analyze
     runs-on: ubuntu-22.04
