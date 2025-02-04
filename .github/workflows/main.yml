@@ -20,4 +20,4 @@ jobs:
 
       - name: Build and test with Maven
         run: mvn clean verify
-        working-directory: tp-devops-correction-docker/simple-api
+        working-directory: simple-api
