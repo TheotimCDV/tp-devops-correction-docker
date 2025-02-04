@@ -4,7 +4,8 @@ on:
     workflows: ["CI devops 2025 - Develop"]
     types:
       - completed
-
+    branches:
+      - 'main'
 jobs:      
   build-and-push-docker-image:
     runs-on: ubuntu-22.04
