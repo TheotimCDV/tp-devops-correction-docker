@@ -3,11 +3,13 @@ on:
   push:
     branches:
       - main
+      - develop
   pull_request:
 
 jobs:
   test-backend: 
     runs-on: ubuntu-22.04
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
     steps:
       - name: Checkout code
         uses: actions/checkout@v2.5.0
@@ -20,12 +22,7 @@ jobs:
 
       - name: Build and test with Maven
         run: mvn clean verify
-        working-directory: simple-api
 
-  build-and-analyze:
-    needs: test-backend
-    runs-on: ubuntu-latest
-    steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
@@ -56,10 +53,13 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=TheotimCDV_tp-devops-correction-docker
         working-directory: simple-api
+
+     
         
   build-and-push-docker-image:
-    needs: build-and-analyze
+    needs: test-backend
     runs-on: ubuntu-22.04
+    if: github.ref == 'refs/heads/main'
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
