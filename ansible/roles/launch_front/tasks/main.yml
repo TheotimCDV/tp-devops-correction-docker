@@ -9,4 +9,4 @@
     networks:
       - name: my_network
     ports:
-      - "81:80"
+      - "81:8080"
