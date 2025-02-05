@@ -1,0 +1,12 @@
+---
+# tasks file for roles/launch_front
+
+- name: Start Application Container
+  docker_container:
+    name: front
+    image: theotimcdv/front:latest
+    pull: yes
+    networks:
+      - name: my_network
+    ports:
+      - "81:80"
