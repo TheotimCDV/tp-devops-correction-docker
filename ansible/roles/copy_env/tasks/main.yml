@@ -1,0 +1,6 @@
+---
+# tasks file for roles/copy_env
+- name: Copy environment file for the application
+  copy:
+    src: /mnt/c/my-project/ansible/files/.env
+    dest: /opt/app/application.env

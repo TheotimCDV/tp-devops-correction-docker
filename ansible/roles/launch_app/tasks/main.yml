@@ -1,0 +1,10 @@
+
+- name: Start Application Container
+  docker_container:
+    name: simple-api
+    image: theotimcdv/tp-devops-simple-api:latest
+
+    networks:
+      - name: my_network2
+      - name: my_network
+    env_file: /opt/app/application.env

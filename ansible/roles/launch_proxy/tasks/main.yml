@@ -1,0 +1,11 @@
+---
+- name: Start Proxy Container
+  docker_container:
+    name: httpd
+    image: theotimcdv/tp-devops-httpd:latest
+    pull: yes
+    networks:
+      - name: my_network
+    ports:
+      - "80:80"
+

@@ -1,0 +1,16 @@
+---
+- name: Copy .env file for database
+  copy:
+    src: /mnt/c/my-project/ansible/files/.env
+    dest: /opt/database.env
+
+- name: Start Database Container
+  docker_container:
+    name: database
+    image: theotimcdv/tp-devops-database:latest
+    pull: yes
+    networks:
+      - name: my_network2
+    env_file: /opt/app/application.env
+    volumes:
+      - my_volume:/var/lib/postgresql/data

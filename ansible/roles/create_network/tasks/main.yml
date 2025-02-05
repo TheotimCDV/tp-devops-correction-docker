@@ -1,0 +1,16 @@
+# roles/create_network/tasks/main.yml
+---
+- name: Create Docker network
+  docker_network:
+    name: my_network
+    state: present
+
+- name: Create Docker network2
+  docker_network:
+    name: my_network2
+    state: present
+
+- name: Create volume
+  docker_volume:
+    name: my_volume
+    state: present
