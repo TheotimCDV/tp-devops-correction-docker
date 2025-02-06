@@ -25,4 +25,4 @@ jobs:
 
 
       - name: Run Ansible Playbook on remote server
-        run: ssh -i ~/.ssh/id_rsa admin@theotim.colin-de-verdiere.takima.cloud "cd /mnt/c/Users/squin/OneDrive/Documents/GitHub/tp-devops-correction-docker/ansible && ansible-playbook -i inventories/setup.yml playbook.yml"
+        run: cd /mnt/c/Users/squin/OneDrive/Documents/GitHub/tp-devops-correction-docker/ansible && ansible-playbook -i inventories/setup.yml playbook.yml"
