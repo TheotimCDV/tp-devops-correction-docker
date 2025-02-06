@@ -1,4 +1,4 @@
-name: Ansible
+name: Ansible Deployment
 on:
   workflow_run:
     workflows: ["CI devops 2025 - Main"]
@@ -6,18 +6,22 @@ on:
       - completed
 
 jobs:      
-  push-ansible:
+  deploy-ansible:
     runs-on: ubuntu-22.04
-    if: github.event.workflow_run.head_branch == 'main'  # Filtre pour ne s'exécuter que sur main
+    if: github.event.workflow_run.head_branch == 'main'  # Exécuter seulement sur main
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Create application environment file
-        run: echo "${{ secrets.POINT_ENV }}" > /opt/app/application.env
+      - name: Setup SSH Connection
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.RSA_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H theotim.colin-de-verdiere.takima.cloud >> ~/.ssh/known_hosts
 
-      - name: Install Ansible
-        run: sudo apt update && sudo apt install -y ansible
+      - name: Create application environment file on remote server
+        run: echo "${{ secrets.POINT_ENV }}" | ssh -i ~/.ssh/id_rsa admin@theotim.colin-de-verdiere.takima.cloud "cat > /opt/app/application.env"
 
-      - name: Run Ansible Playbook
-        run: sudo ansible-playbook -i inventories/setup.yml playbook.yml
+      - name: Run Ansible Playbook on remote server
+        run: ssh -i ~/.ssh/id_rsa admin@theotim.colin-de-verdiere.takima.cloud "cd /chemin/de/ton/projet/ansible && ansible-playbook -i inventories/setup.yml playbook.yml"
