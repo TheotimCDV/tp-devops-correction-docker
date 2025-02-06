@@ -62,7 +62,7 @@ export default {
         .then(data => (this.students = data));
     }
     // get department id
-    fetch(`http://${process.env.VUE_APP_API_URL}/departments${this.name}`)
+    fetch(`http://${process.env.VUE_APP_API_URL}/departments/${this.name}`)
       .then(response => response.json())
       .then(data => (this.currentDepartment = data));
   },
