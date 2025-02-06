@@ -25,5 +25,5 @@ jobs:
 
 
       - name: Run Ansible Playbook on remote server
-        run: ansible-playbook -i inventories/setup.yml playbook.yml"
+        run: ansible-playbook -i inventories/setup.yml playbook.yml
         working-directory: ansible
