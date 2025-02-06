@@ -21,7 +21,8 @@ jobs:
           ssh-keyscan -H theotim.colin-de-verdiere.takima.cloud >> ~/.ssh/known_hosts
 
       - name: Create application environment file on remote server
-        run: echo "${{ secrets.POINT_ENV }}" | ssh -i ~/.ssh/id_rsa admin@theotim.colin-de-verdiere.takima.cloud "cat > /opt/app/application.env"
+        run: echo "${{ secrets.POINT_ENV }}" | ssh -i ~/.ssh/id_rsa admin@theotim.colin-de-verdiere.takima.cloud "sudo tee /opt/app/application.env > /dev/null"
+
 
       - name: Run Ansible Playbook on remote server
         run: ssh -i ~/.ssh/id_rsa admin@theotim.colin-de-verdiere.takima.cloud "cd /chemin/de/ton/projet/ansible && ansible-playbook -i inventories/setup.yml playbook.yml"
