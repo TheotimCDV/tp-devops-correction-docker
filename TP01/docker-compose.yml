@@ -1,0 +1,37 @@
+services:
+  simple-api-students:
+    build: "JAVA/students/simple-api-student-main"
+    container_name: simple-api-students
+    environment:
+      - URL=jdbc:postgresql://postgres-db:5432/db
+      - POSTGRES_USER=usr
+      - POSTGRES_PASSWORD=pwd
+    networks:
+      - mynetwork
+    depends_on:
+      - postgres-db
+
+  postgres-db:
+    build: "db"
+    container_name: postgres-db
+    environment:
+      - POSTGRES_DB=db
+      - POSTGRES_USER=usr
+      - POSTGRES_PASSWORD=pwd
+    networks:
+      - mynetwork
+    volumes:
+      - ./db/data:/var/lib/postgresql/data
+
+  apache-proxy:
+    build: "apache-server"
+    container_name: apache-proxy
+    ports:
+      - "80:80"
+    networks:
+      - mynetwork
+    depends_on:
+      - simple-api-students
+
+networks:
+    mynetwork:
