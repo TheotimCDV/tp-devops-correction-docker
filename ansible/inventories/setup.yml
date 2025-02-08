@@ -1,7 +1,9 @@
-all:
- vars:
-   ansible_user: admin
-   ansible_ssh_private_key_file: /mnt/c/id_rsa
- children:
-   prod:
-     hosts: theotim.colin-de-verdiere.takima.cloud
+all:  # Définit un groupe principal contenant toutes les machines
+  vars:  # Variables globales applicables à tous les hôtes
+    ansible_user: admin  # Utilisateur utilisé pour la connexion SSH
+    ansible_ssh_private_key_file: /mnt/c/id_rsa  # Clé privée SSH pour l'authentification
+
+  children:  # Définition des sous-groupes d'hôtes
+    prod:  # Groupe "prod" (environnement de production)
+      hosts:  # Liste des hôtes appartenant à ce groupe
+        theotim.colin-de-verdiere.takima.cloud  # Adresse du serveur cible

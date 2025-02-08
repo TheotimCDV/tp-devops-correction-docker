@@ -1,48 +1,51 @@
-name: CI devops 2025 - Main
+name: CI devops 2025 - Main  # Nom du workflow
+
 on:
   workflow_run:
-    workflows: ["CI devops 2025 - Develop"]
+    workflows: ["CI devops 2025 - Develop"]  # Déclenche ce workflow lorsque le workflow "CI devops 2025 - Develop" est terminé
     types:
-      - completed
+      - completed  # Exécute ce workflow uniquement si le précédent s'est terminé (succès ou échec)
     branches:
-      - 'main'
-jobs:      
-  build-and-push-docker-image:
-    runs-on: ubuntu-22.04
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - 'main'  # Ce workflow ne s'exécute que sur la branche 'main'
 
-      - name: Log in to Docker Hub
+jobs:      
+  build-and-push-docker-image:  # Job pour construire et publier les images Docker
+    runs-on: ubuntu-22.04  # Exécute le job sur une machine virtuelle Ubuntu 22.04
+
+    steps:
+      - name: Checkout code  # Étape 1 : Récupère le code source du dépôt GitHub
+        uses: actions/checkout@v4  # Utilise l’action officielle "checkout" pour cloner le dépôt
+
+      - name: Log in to Docker Hub  # Étape 2 : Connexion à Docker Hub pour permettre le push des images
         uses: docker/login-action@v2
         with:
-          username: ${{ secrets.DOCKER_HUB_NAME }}
-          password: ${{ secrets.DOCKER_HUB_TOKEN }}
+          username: ${{ secrets.DOCKER_HUB_NAME }}  # Nom d'utilisateur Docker Hub stocké en secret GitHub
+          password: ${{ secrets.DOCKER_HUB_TOKEN }}  # Token Docker Hub stocké en secret GitHub
 
-      - name: Build image and push backend
+      - name: Build image and push backend  # Étape 3 : Construction et push de l'image Docker du backend (API)
         uses: docker/build-push-action@v3
         with:
-          context: ./simple-api
-          tags: ${{ secrets.DOCKER_HUB_NAME }}/tp-devops-simple-api:latest
-          push: true
+          context: ./simple-api  # Définit le dossier contenant le Dockerfile pour le backend
+          tags: ${{ secrets.DOCKER_HUB_NAME }}/tp-devops-simple-api:latest  # Nom de l'image avec tag "latest"
+          push: true  # Active le push automatique vers Docker Hub
 
-      - name: Build image and push database
+      - name: Build image and push database  # Étape 4 : Construction et push de l'image Docker pour la base de données
         uses: docker/build-push-action@v3
         with:
-          context: ./database
-          tags: ${{ secrets.DOCKER_HUB_NAME }}/tp-devops-database:latest
-          push: true
+          context: ./database  # Définit le dossier contenant le Dockerfile pour la base de données
+          tags: ${{ secrets.DOCKER_HUB_NAME }}/tp-devops-database:latest  # Nom de l'image avec tag "latest"
+          push: true  # Active le push vers Docker Hub
 
-      - name: Build image and push httpd
+      - name: Build image and push httpd  # Étape 5 : Construction et push de l'image Docker du serveur HTTP
         uses: docker/build-push-action@v3
         with:
-          context: ./http-server
-          tags: ${{ secrets.DOCKER_HUB_NAME }}/tp-devops-httpd:latest
-          push: true
+          context: ./http-server  # Définit le dossier contenant le Dockerfile du serveur HTTP
+          tags: ${{ secrets.DOCKER_HUB_NAME }}/tp-devops-httpd:latest  # Nom de l'image avec tag "latest"
+          push: true  # Active le push vers Docker Hub
 
-      - name: Build image and push front
+      - name: Build image and push front  # Étape 6 : Construction et push de l'image Docker du frontend
         uses: docker/build-push-action@v3
         with:
-          context: ./devops-front-main
-          tags: ${{ secrets.DOCKER_HUB_NAME }}/front:latest
-          push: true
+          context: ./devops-front-main  # Définit le dossier contenant le Dockerfile du frontend
+          tags: ${{ secrets.DOCKER_HUB_NAME }}/front:latest  # Nom de l'image avec tag "latest"
+          push: true  # Active le push vers Docker Hub
