@@ -1,31 +1,33 @@
-services:
 
-  database:
-    build: "database"
+
+services:  # Définition des services de l'application
+
+  database:  # Service pour la base de données PostgreSQL
+    build: "database"  # Construit l'image à partir du dossier "database"
     environment:
-      - POSTGRES_PASSWORD=pwd
+      - POSTGRES_PASSWORD=pwd  # Définit le mot de passe de PostgreSQL
     volumes:
-      - db-volume:/var/lib/postgresql/data
+      - db-volume:/var/lib/postgresql/data  # Stocke les données de la base de façon persistante
     networks:
-      - my-network
+      - my-network  # Connecte le service au réseau interne "my-network"
 
-  simple-api:
-    build: "simple-api"
+  simple-api:  # Service pour l'API qui interagit avec la base de données
+    build: "simple-api"  # Construit l'image à partir du dossier "simple-api"
     environment:
-      - DATABASE_HOST=database
-      - DATABASE_PASSWORD=pwd
+      - DATABASE_HOST=database  # Indique que l'API doit se connecter au service "database"
+      - DATABASE_PASSWORD=pwd  # mdp de la base de données
     networks:
-      - my-network
+      - my-network  # Connecte l'API au même réseau que la base de données
 
-  httpd:
-    build: "http-server"
+  httpd:  # Service pour le serveur HTTP (Apache, Nginx, etc.)
+    build: "http-server"  # Construit l'image à partir du dossier "http-server"
     ports:
-      - "80:80"
+      - "80:80"  # Expose le port 80 du conteneur sur le port 80 de l'hôte (accès web)
     networks:
-      - my-network
+      - my-network  # Connecte le serveur HTTP au même réseau que l'API
 
-networks:
-  my-network:
+networks:  # Définition des réseaux
+  my-network:  # Crée un network pour permettre aux services de communiquer entre eux
 
-volumes:
-  db-volume :
+volumes:  # Définition des volumes persistants
+  db-volume:  # Volume pour stocker les données de la base PostgreSQL de manière persistante
